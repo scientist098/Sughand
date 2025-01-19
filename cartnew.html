@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="cartnew.css">
+</head>
+<body>
+    <div class="cart-page">
+        <h1>Your Cart</h1>
+        <div id="cart-items"></div>
+        <div id="cart-total">
+            <h3>Total amount:14.49$</span></h3>
+        </div>
+        <button id="checkout-btn">Proceed to Checkout</button>
+        <button id="continue-shopping" onclick="window.location.href='projectnew.html';">
+            Continue Shopping
+        </button>
+    </div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function updateCart() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotalPrice = document.getElementById('cart-total-price');
+            cartItemsContainer.innerHTML = '';
+            let totalPrice = 0;
+
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('cart-item');
+                itemElement.innerHTML = `
+                    <img src="${item.image}" width="50" alt="${item.name}">
+                    <p>${item.name}</p>
+                    <p>Price: $${item.price}</p>
+                    <p>Quantity: ${item.quantity}</p>
+                    <button onclick="removeFromCart(${item.id})">Remove</button>
+                `;
+                cartItemsContainer.appendChild(itemElement);
+                totalPrice += item.price * item.quantity;
+            });
+
+            cartTotalPrice.textContent = `$${totalPrice.toFixed(2)}`;
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
+        }
+
+        updateCart();
+
+        document.getElementById('checkout-btn').addEventListener('click', function() {
+            alert('Proceeding to checkout...');
+        });
+    </script>
+</body>
+</html>
